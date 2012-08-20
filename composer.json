@@ -12,7 +12,7 @@
 	],
 	"support": {
 		"issues": "https://github.com/Chatventure/swyf-sdk/issues",
-		'email': "team@swyf.com"
+		"email": "team@swyf.com"
 	},
 	"require": {
 		"php": ">=5.3.0",
