@@ -1,5 +1,5 @@
 {
-	"name": "Chatventure/swyf-sdk",
+	"name": "chatventure/swyf-sdk",
 	"description": "Library for communication with the Swyf API for faceted lookbook and product search.",
 	"keywords": ["sdk", "swyf"],
 	"homepage": "https://github.com/Chatventure/swyf-sdk",
