@@ -71,17 +71,115 @@ The following routes and filters are defined in the system:
 -   `/shop`
 -   `/shop/:shop_id`
 
+### Errors
+There are two types of errors the API can return: Auth and Request. All errors in the platform have a three digit code, a message and an HTTP response code.
+
+#### Auth errors
+<table>
+	<tr>
+		<th>error code</th><th>http status</th><th>error message</th>
+	</tr>
+	<tr>
+		<td>100</td><td>401</td><td>Authentication failed</td>
+	</tr>
+	<tr>
+		<td>101</td><td>401</td><td>Invalid credentials</td>
+	</tr>
+	<tr>
+		<td>102</td><td>403</td><td>Not allowed to %s on %s.</td>
+	</tr>
+	<tr>
+		<td>103</td><td>403</td><td>Not allowed to access object %s with id %s.</td>
+	</tr>
+</table>
+
+#### Request errors
+<table>
+	<tr>
+		<th>error code</th><th>http status</th><th>error message</th>
+	</tr>
+	<tr>
+		<td>200</td><td>500</td><td>Request failed</td>
+	</tr>
+	<tr>
+		<td>201</td><td>501</td><td>Unknown object requested: %s.</td>
+	</tr>
+	<tr>
+		<td>202</td><td>404</td><td>Object %s with id %s doesn't exist.</td>
+	</tr>
+	<tr>
+		<td>203</td><td>501</td><td>The requested object is invalid.</td>
+	</tr>
+	<tr>
+		<td>204</td><td>405</td><td>The requested method is invalid: %s.</td>
+	</tr>
+	<tr>
+		<td>205</td><td>400</td><td>Method %s needs an object id, which has not been specified.</td>
+	</tr>
+	<tr>
+		<td>206</td><td>400</td><td>Method %s does not need an object id, but has been specified: %s.</td>
+	</tr>
+	<tr>
+		<td>207</td><td>400</td><td>Some of the parameters are missing: %s.</td>
+	</tr>
+	<tr>
+		<td>208</td><td>500</td><td>Failed to insert data: %s.</td>
+	</tr>
+	<tr>
+		<td>209</td><td>500</td><td>Failed to update data: %s.</td>
+	</tr>
+	<tr>
+		<td>210</td><td>500</td><td>Failed to delete data: %s.</td>
+	</tr>
+	<tr>
+		<td>211</td><td>404</td><td>Object %s with id %s is not active.</td>
+	</tr>
+	<tr>
+		<td>212</td><td>400</td><td>Parameter '%s' with value '%s' is invalid.</td>
+	</tr>
+	<tr>
+		<td>213</td><td>400</td><td>SnUser with social network ID %s in %s already exists.</td>
+	</tr>
+	<tr>
+		<td>214</td><td>400</td><td>There are more parameters found than required.</td>
+	</tr>
+	<tr>
+		<td>215</td><td>400</td><td>Method %s on object %s can only be called when filtered through: %s.</td>
+	</tr>
+	<tr>
+		<td>216</td><td>400</td><td>Method %s on object %s is not implemented.</td>
+	</tr>
+	<tr>
+		<td>217</td><td>403</td><td>UserAccountSetting %s for user %s already exists.</td>
+	</tr>
+</table>
 
 ## Swyf PHP SDK
+The Swyf PHP SDK is a very small wrapper which handles all communication, encoding, authentication and url handling which is provided by the Swyf API. The library is open sourced and everyone is encouraged to file bugs, complete documentation etc.
+
+The getting started for the SDK is fairly short:
+
+1. Obtain an application and secret from the team.
+2. Make sure you either have a [psr-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) based autoloader OR have [composer](http://getcomposer.org) installed.
+3. Initialize a `new Swyf_Api($application, $secret)` object.
+4. Perform an API request with `get`, `post`, `put`, `delete`.
+
+### Exceptions
+Three types of exceptions can be thrown from all API requests. The types are:
+
+-   __Swyf_Api_Exception__  
+    Exception used for API internal errors as described in the API documentation. The codes and messages match.
+-   __Swyf_Http_Exception__  
+    For all problems in the construction of the API request.
+-   __Swyf_Http_Exception_Curl__  
+    For all errors returned by the cURL module, which can be both system and request errors.
 
 
-Explanation of resource types.
-Properties of a resource type in list and detail.
-Curl properties for each resource type list/get
-Filter parameters for product search.
-Filter parameters for lookbook search.
+# To be completed
+
+- Explanation of resource types.
+- Properties of a resource type in list and detail.
+- Curl properties for each resource type list/get
+- Filter parameters for product search.
+- Filter parameters for lookbook search.
 Outputs.
-Relations.
-API Errors.
-Requesting Access.
-Using the Swyf API.
