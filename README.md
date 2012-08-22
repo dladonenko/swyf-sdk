@@ -77,12 +77,14 @@ Returns a list of multiple products with the following keys available:
 	The following filters are available.
 	* `limit`: limits the query (default is 10)
 	* `offset`: gives the query an offset (default is 0)
+	* `query`: search query (string only)
 	* `category`: can be a comma separated string or an array
 	* `shop`: can be a comma separated string or an array
 	* `brand`: can be a comma separated string or an array
 	* `price`: can be a comma separated string or an array
 	* `discount`: can be a comma separated string or an array
-	* `sort`: can be set as a string
+	* `sort`: can have these values: `relevance`, `price-asc`, `price-desc`, `popularity`, `date`
+		Note that date is default, with the `query` filter relevance is default.
 
 -   `/product/:product_id`
 Returns one single product with the following keys available:
@@ -125,8 +127,10 @@ Returns a list of multiple lookbooks with the following keys available:
 	The following filters are available.
 	* `limit`: limits the query (default is 10)
 	* `offset`: gives the query an offset (default is 0)
+	* `query`: search query (string only)
 	* `tags`: can be a comma separated string or an array
-	* `sort`: can be set as a string
+	* `sort`: can have these values: `relevance`, `popularity`, `date`
+		Note that date is default, with the `query` filter relevance is default.
 
 -   `/lookbook/:lookbook_id`
 Returns a single lookbook in the same format as `/lookbook`.
