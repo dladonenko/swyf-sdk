@@ -62,14 +62,98 @@ The resource types as described above can be used together in order to implement
 The following routes and filters are defined in the system:
 
 -   `/product`
+Returns a list of multiple products with the following keys available:
+	* `product_id`: identifier
+	* `name`: the name of the product
+	* `api_url`: url to retrieve more data about this product
+	* `image_small`: url to the small image
+	* `image_medium`: url to the medium image
+	* `image_large`: url to the large image
+	* `deeplink_buy_url`: url used to buy a product
+	* `price_formatted`: pre-formatted price
+	* `from_price_formatted`: pre-formatted from price (in case of a sale)
+	* `shop_currency`: ISO currency used by the shop
+	
+	The following filters are available.
+	* `limit`: limits the query (default is 10)
+	* `offset`: gives the query an offset (default is 0)
+	* `category`: can be a comma separated string or an array
+	* `shop`: can be a comma separated string or an array
+	* `brand`: can be a comma separated string or an array
+	* `price`: can be a comma separated string or an array
+	* `discount`: can be a comma separated string or an array
+	* `sort`: can be set as a string
+
 -   `/product/:product_id`
+Returns one single product with the following keys available:
+	* `product_id`: identifier
+	* `name`: the name of the product
+	* `api_url`: url to retrieve more data about this product
+	* `image_small`: url to the small image
+	* `image_medium`: url to the medium image
+	* `image_large`: url to the large image
+	* `deeplink_buy_url`: url used to buy a product
+	* `price`: float notation of the price
+	* `price_formatted`: pre-formatted price
+	* `from_price`: float notation of the from price (in case of a sale)
+	* `from_price_formatted`: pre-formatted from price (in case of a sale)
+	* `shop_name`: name of the shop
+	* `shop_name_normalized`: name of the shop, usable in urls
+	* `shop_currency`: ISO currency used by the shop
+	* `brand`: name of the brand
+	* `brand_normalized`: name of the brand, usable in urls
+
 -   `/product/:product_id/shop`
+Returns a single shop in the same format as `/shop`.
+-   `/product/:product_id/lookbook`
+Returns a list in the same format as `/lookbook`.
+
 -   `/lookbook`
+Returns a list of multiple lookbooks with the following keys available:
+	* `lookbook_id`: identifier
+	* `api_url`: url to retrieve more data about this lookbook
+	* `title`: the title of the lookbook
+	* `description`: the description of the lookbook
+	* `image_small`: url to the small image
+	* `image_medium`: url to the medium image
+	* `image_large`: url to the large image
+	* `created_at`: date and time of creation
+	* `total_price`: float notation of the total price
+	* `total_price_formatted`: pre-formatted total price
+	* `total_price_currency`: ISO currency used by the jpx
+	
+	The following filters are available.
+	* `limit`: limits the query (default is 10)
+	* `offset`: gives the query an offset (default is 0)
+	* `tags`: can be a comma separated string or an array
+	* `sort`: can be set as a string
+
 -   `/lookbook/:lookbook_id`
+Returns a single lookbook in the same format as `/lookbook`.
 -   `/lookbook/:lookbook_id/product`
--   `/lookbook/:lookbook_id/user-account`
+Returns a list in the same format as `/product`.
+
 -   `/shop`
+Returns a list of multiple shops with the following keys available:
+	* `shop_id`: identifier
+	* `api_url`: url to retrieve more data about this shop
+	* `name`: the name of this shop
+	* `normalized_name`: name of the shop, usable in urls
+	* `description`: description of the shop
+	* `target_gender`: the gender where the shop targets on
+	* `locale`: the locale of the shop
+	* `currency`: the currency used by this shop
+	* `image`: url to the shop's logo
+	* `shop_url`: the url to the shop's homepage
+	* `return_time`: maximum allowed return time
+	* `return_free`: returns are free (true or false)
+	* `return_address`: the address custumers can return their order to
+	* `return_money_back`: money back after return (true or false)
+	* `delivery_time`: usual time till delivery
+	* `payment_method`: list of accepted payment methods
+	* `delivery_costs`: usual delivery costs
 -   `/shop/:shop_id`
+Returns a single shop in the same format as `/shop`.
 
 ### Errors
 There are two types of errors the API can return: Auth and Request. All errors in the platform have a three digit code, a message and an HTTP response code.
@@ -174,11 +258,78 @@ Three types of exceptions can be thrown from all API requests. The types are:
 -   __Swyf_Http_Exception_Curl__  
     For all errors returned by the cURL module, which can be both system and request errors.
 
+### Example code
+The following code example explains how the api should be used. We start with including the autoloader and initializing the `Swyf_Api`. Then we set the base url and we are ready to start calling the api.
+
+	<?php
+	ini_set('display_errors', 'On');
+	error_reporting(E_ALL);
+
+	include_once 'vendor/autoload.php';
+
+	$api = new Swyf_Api('jpx-JPXID', 'JPXSECRET');
+	$api->setBaseUrl('https://api.shopwithyourfriends.com/api/v1/');
+
+	$res = $api->get('product', array(
+		'FILTER_NAME' => array(
+			FILTER_VALUE
+		),
+		'FILTER_NAME' => FILTER_VALUE
+	));
+	?>
+
+### Results
+Results are returned as php arrays and objects, the JSON below is for readability.
+
+	{
+		data: {
+			items: [ //contains the requested items
+				{ … }, 
+				{ … }
+			],
+			total_hits: TOTAL_RESULT_COUNT,
+			facets: { //contains available facets
+				FACET_NAME : {
+					other_items_count : 0,
+					items : [ //contains available filters
+						{
+							items : [ //contains available sub filters
+								{
+									normalized_name: NORMALIZED_NAME,
+									count: NUMBER_OF_ITEMS_WITH_FILTER,
+									is_selected: false,
+									is_child_selected: false,
+									display_name: DISPLAY_NAME,
+									type: FACET_NAME,
+									parent_normalized: PARENT_NORMALIZED_NAME,
+									is_parent_selected: false
+								},
+								{ ... }
+							],
+							normalized_name: NORMALIZED_NAME,
+							count: NUMBER_OF_ITEMS_WITH_FILTER,
+							is_selected: false,
+							is_child_selected: false,
+							display_name: DISPLAY_NAME,
+							type: FACET_NAME,
+							parent_normalized: null,
+							is_parent_selected: false
+						},
+						{ ... }
+					]
+				},
+				{ ... }
+			}
+		},
+		paging: {
+			prev: null,
+			next: 'https://api.shopwithyourfriends.com/api/v1/product?category=&query=&sort=&limit=10&offset=10'
+		}
+	}
 
 # To be completed
 
 - Explanation of resource types.
-- Properties of a resource type in list and detail.
 - Curl properties for each resource type list/get
 - Filter parameters for product search.
 - Filter parameters for lookbook search.
