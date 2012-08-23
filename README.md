@@ -330,11 +330,3 @@ Results are returned as php arrays and objects, the JSON below is for readabilit
 			next: 'https://api.shopwithyourfriends.com/api/v1/product?category=&query=&sort=&limit=10&offset=10'
 		}
 	}
-
-# To be completed
-
-- Explanation of resource types.
-- Curl properties for each resource type list/get
-- Filter parameters for product search.
-- Filter parameters for lookbook search.
-Outputs.
